@@ -70,6 +70,8 @@ export default class SideBySideRenderer {
       filePath: filePathTemplate.render(
         {
           fileDiffName: renderUtils.filenameDiff(file),
+          addedLines: file.addedLines,
+          deletedLines: file.deletedLines,
         },
         {
           fileIcon: fileIconTemplate,
@@ -97,8 +99,8 @@ export default class SideBySideRenderer {
     return file.blocks
       .map(block => {
         const fileHtml = {
-          left: this.makeHeaderHtml(block.header, file),
-          right: this.makeHeaderHtml(''),
+          left: this.makeHeaderHtml(block, file, true),
+          right: this.makeHeaderHtml(block, file, false),
         };
 
         this.applyLineGroupping(block).forEach(([contextLines, oldLines, newLines]) => {
@@ -203,12 +205,16 @@ export default class SideBySideRenderer {
     return doMatching ? matcher(oldLines, newLines) : [[oldLines, newLines]];
   }
 
-  makeHeaderHtml(blockHeader: string, file?: DiffFile): string {
+  makeHeaderHtml(block?: DiffBlock, file?: DiffFile, isLeft?: boolean): string {
     return this.hoganUtils.render(genericTemplatesPath, 'block-header', {
       CSSLineClass: renderUtils.CSSLineClass,
-      blockHeader: file?.isTooBig ? blockHeader : renderUtils.escapeForHtml(blockHeader),
+      blockHeader: isLeft ? (file?.isTooBig ? block?.header : renderUtils.escapeForHtml(block?.header ?? '')) : '',
       lineClass: 'd2h-code-side-linenumber',
       contentClass: 'd2h-code-side-line',
+      newStartLine: block?.newStartLine,
+      oldStartLine: block?.oldStartLine,
+      isNewRender: !isLeft && block?.newStartLine !== 1,
+      isOldRender: isLeft && block?.oldStartLine !== 1,
     });
   }
 

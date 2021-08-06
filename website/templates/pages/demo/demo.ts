@@ -2,10 +2,12 @@ import { Diff2HtmlUI, defaultDiff2HtmlUIConfig, Diff2HtmlUIConfig } from '../../
 
 import '../../../main.ts';
 import '../../../main.css';
-import 'highlight.js/styles/github.css';
+// import 'highlight.js/styles/github.css';
+import 'highlight.js/styles/vs.css';
 import '../../../../src/ui/css/diff2html.css';
 import './demo.css';
 
+// import mutiDiff from './muti-diff'
 /*
  * Example URLs:
  *
@@ -246,7 +248,12 @@ document.addEventListener('DOMContentLoaded', async () => {
     updateBrowserUrl(config, diffUrl);
     const newRequest = prepareRequest(diffUrl);
     diffString = await getDiff(newRequest);
+    // console.log(diffString)
     draw(diffString, config, elements);
+    // draw(mutiDiff, config, elements);
+    /* document.querySelectorAll('[data-block-numbers]').forEach(el => {
+        console.log(el)
+    }) */
   };
 
   const elements: Elements = {

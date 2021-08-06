@@ -3,7 +3,11 @@
     <span class="d2h-file-name">{{fileDiffName}}</span>
     {{>fileTag}}
 </span>
-<label class="d2h-file-collapse">
+<span class="d2h-file-stats">
+    <span class="d2h-lines-added">+{{addedLines}}</span>
+    <span class="d2h-lines-deleted">-{{deletedLines}}</span>
+</span>
+{{! <label class="d2h-file-collapse">
     <input class="d2h-file-collapse-input" type="checkbox" name="viewed" value="viewed">
     Viewed
-</label>
+</label> }}

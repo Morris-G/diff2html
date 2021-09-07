@@ -1,7 +1,6 @@
 {
   "name": "diff2html",
   "version": "3.0.0-beta.1",
-  "homepage": "https://diff2html.xyz",
   "description": "Fast Diff to colorized HTML",
   "keywords": [
     "git",
@@ -20,17 +19,6 @@
     "difftohtml",
     "colorized"
   ],
-  "author": {
-    "name": "Rodrigo Fernandes",
-    "email": "rtfrodrigo@gmail.com"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git://github.com/rtfpessoa/diff2html.git"
-  },
-  "bugs": {
-    "url": "https://www.github.com/rtfpessoa/diff2html/issues"
-  },
   "engines": {
     "node": ">=12"
   },
@@ -51,13 +39,6 @@
     "gen": "yarn run gen:toc",
     "gen:toc-base": "markdown-toc --maxdepth 3 --bullets='-' -i",
     "gen:toc": "yarn run gen:toc-base README.md",
-    "test": "is-ci 'test:coverage' 'test:watch'",
-    "test:coverage": "jest --coverage",
-    "test:watch": "jest --watch",
-    "test:debug": "node --inspect-brk ./node_modules/jest/bin/jest.js --runInBand --watch",
-    "coverage:open": "yarn run test:coverage && open ./coverage/index.html",
-    "coverage:push": "curl -Ls https://coverage.codacy.com/get.sh | bash",
-    "validate": "yarn run build:templates && yarn run format:check && yarn run lint:check && yarn run build && yarn run test:coverage",
     "fix": "yarn run format:fix && yarn run lint:fix",
     "start": "yarn run start:website",
     "start:website": "webpack-dev-server --mode development --config webpack.website.ts",
@@ -81,11 +62,12 @@
     ]
   },
   "dependencies": {
+    "animate.css": "^4.1.1",
     "diff": "5.0.0",
     "hogan.js": "3.0.2"
   },
   "optionalDependencies": {
-    "highlight.js": "11.1.0"
+    "highlight.js": "11.2.0"
   },
   "devDependencies": {
     "@types/copy-webpack-plugin": "8.0.1",

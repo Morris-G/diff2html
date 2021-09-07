@@ -1,11 +1,11 @@
 <tr>
     <td class="{{lineClass}} {{CSSLineClass.INFO}}">
-        {{#isNewRender}}
-        <div class="load-more" data-new-line-number="{{newStartLine}}">...</div>
-        {{/isNewRender}}
         {{#isOldRender}}
-        <div class="load-more" data-old-line-number="{{oldStartLine}}">...</div>
+        <div class="load-more" data-file-mode="old" data-file-name="{{oldName}}" data-line-number="{{oldStartLine}}">...</div>
         {{/isOldRender}}
+        {{#isNewRender}}
+        <div class="load-more" data-file-mode="new" data-file-name="{{newName}}" data-line-number="{{newStartLine}}">...</div>
+        {{/isNewRender}}
     </td>
     <td class="{{CSSLineClass.INFO}}">
         <div class="{{contentClass}}">{{{blockHeader}}}</div>

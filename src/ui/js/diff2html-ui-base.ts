@@ -52,6 +52,60 @@ export class Diff2HtmlUI {
     if (this.config.highlight) this.highlightCode();
     if (this.config.fileListToggle) this.fileListToggle(this.config.fileListStartVisible);
     if (this.config.fileContentToggle) this.fileContentToggle();
+    document.querySelectorAll('.load-more').forEach(el => {
+        el.addEventListener('click', e => {
+            const { fileMode, fileName, lineNumber } = (e?.target as HTMLElement)?.dataset
+            const loadMore = new CustomEvent('loadMore', {
+                detail: { fileMode, fileName, lineNumber }
+            })
+            window.dispatchEvent(loadMore)
+        })
+    })
+
+    document.querySelectorAll('.d2h-file-name-wrapper').forEach(cl => {
+      cl.addEventListener('click', e => {
+        (e?.target as HTMLElement)?.parentElement?.classList.toggle('uncollapse')
+      })
+    })
+
+    document.querySelectorAll('.d2h-file-header').forEach(el => {
+      el.addEventListener('click', e => {
+        const t = (e.target as HTMLElement).id
+        switch(t) {
+          case 'copy':
+            console.log('====click copy====')
+            break
+          case 'tool':
+            console.log('====click tool====')
+            break
+          case '':
+            console.log(e)
+        }
+      })
+    })
+
+    document.querySelectorAll('tbody.d2h-diff-tbody').forEach(tb => {
+        tb.addEventListener('click', e => {
+            // const target = e.target
+            const { className, dataset } = e.target as HTMLElement
+            // console.log({className, dataset})
+            const { fileName, lineMode, lineNumber, targetId } = dataset
+            switch(targetId) {
+                case 'lineNumber':
+                    // TODO
+                    document.querySelector('.code-line-selected')?.classList.remove('code-line-selected');
+                    (e?.target as HTMLElement)?.parentElement?.classList.toggle('code-line-selected')
+                    console.log(`点击了${lineMode === 'old' ? '左' : '右'}侧第${lineNumber}行，文件名是${fileName}`)
+                    break
+                case 'commentBtn':
+                    // TODO
+                    console.log(`点击了${lineMode === 'old' ? '左' : '右'}侧第${lineNumber}行的评论按钮，文件名是${fileName}`)
+                    break
+                default:
+                    console.log({ className, dataset })
+            }
+        })
+    })
   }
 
   synchronisedScroll(): void {
@@ -157,7 +211,7 @@ export class Diff2HtmlUI {
 
         const result: HighlightResult = closeTags(
           this.hljs.highlight(text, {
-            language: hljsLanguage?.name || 'plaintext',
+            language: hljsLanguage?.name === 'HTML, XML' ? 'XML' : hljsLanguage?.name || 'plaintext',
             ignoreIllegals: true,
           }),
         );
@@ -171,7 +225,8 @@ export class Diff2HtmlUI {
 
         line.classList.add('hljs');
         if (result.language) {
-          line.classList.add(result.language);
+          const langStr = result.language.replaceAll(' ', '&nbsp;')
+          line.classList.add(langStr);
         }
         line.innerHTML = result.value;
       });

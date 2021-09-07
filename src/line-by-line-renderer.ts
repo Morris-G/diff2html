@@ -61,6 +61,7 @@ export default class LineByLineRenderer {
     const fileDiffTemplate = this.hoganUtils.template(baseTemplatesPath, 'file-diff');
     const filePathTemplate = this.hoganUtils.template(genericTemplatesPath, 'file-path');
     const fileIconTemplate = this.hoganUtils.template(iconsBaseTemplatesPath, 'file');
+	const collapseIconTemplate = this.hoganUtils.template(iconsBaseTemplatesPath, 'collapse');
     const fileTagTemplate = this.hoganUtils.template(tagsBaseTemplatesPath, renderUtils.getFileIcon(file));
 
     return fileDiffTemplate.render({
@@ -70,8 +71,11 @@ export default class LineByLineRenderer {
       filePath: filePathTemplate.render(
         {
           fileDiffName: renderUtils.filenameDiff(file),
+          addedLines: file.addedLines,
+          deletedLines: file.deletedLines,
         },
         {
+          collapseIcon: collapseIconTemplate,
           fileIcon: fileIconTemplate,
           fileTag: fileTagTemplate,
         },
@@ -98,6 +102,12 @@ export default class LineByLineRenderer {
           blockHeader: file.isTooBig ? block.header : renderUtils.escapeForHtml(block.header),
           lineClass: 'd2h-code-linenumber',
           contentClass: 'd2h-code-line',
+					newStartLine: block?.newStartLine,
+					oldStartLine: block?.oldStartLine,
+					isNewRender: block?.newStartLine !== 1,
+					isOldRender: block?.oldStartLine !== 1,
+					oldName: file?.oldName,
+					newName: file?.newName
         });
 
         this.applyLineGroupping(block).forEach(([contextLines, oldLines, newLines]) => {

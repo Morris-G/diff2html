@@ -1,9 +1,9 @@
-import { Diff2HtmlUI, defaultDiff2HtmlUIConfig, Diff2HtmlUIConfig } from '../../../../src/ui/js/diff2html-ui-slim';
+import { Diff2HtmlUI, defaultDiff2HtmlUIConfig, Diff2HtmlUIConfig } from '../../../../src/ui/js/diff2html-ui';
 
 import '../../../main.ts';
 import '../../../main.css';
-// import 'highlight.js/styles/github.css';
-import 'highlight.js/styles/vs.css';
+// import 'highlight.js/styles/atom-one-light.css';
+import 'highlight.js/styles/base16/cupertino.css';
 import '../../../../src/ui/css/diff2html.css';
 import './demo.css';
 
@@ -306,6 +306,10 @@ document.addEventListener('DOMContentLoaded', async () => {
     diffString = await getDiff(newRequest);
     drawAndUpdateUrl(newDiffUrl, diffString, config, elements);
   });
+
+/*   window.addEventListener('loadMore', (e) => {
+    console.log('====loadMore====', (e as CustomEvent)?.detail)
+  }) */
 
   return drawAndUpdateUrl(elements.url.input.value, diffString, config, elements);
 });

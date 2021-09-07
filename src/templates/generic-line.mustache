@@ -1,9 +1,19 @@
 <tr>
-    <td class="{{lineClass}} {{type}}">
+    <td class="{{lineClass}} {{type}}"
+        data-target-id="lineNumber"
+        data-line-number="{{lineNumber}}"
+        data-file-name="{{fileName}}"
+        data-line-mode="{{lineMode}}">
       {{{lineNumber}}}
     </td>
     <td class="{{type}}">
         <div class="{{contentClass}}">
+            <span class="line-comment-btn"
+                data-target-id="commentBtn"
+                data-line-number="{{lineNumber}}"
+                data-file-name="{{fileName}}"
+                data-line-mode="{{lineMode}}">+
+            </span>
         {{#prefix}}
             <span class="d2h-code-line-prefix">{{{prefix}}}</span>
         {{/prefix}}

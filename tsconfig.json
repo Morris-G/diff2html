@@ -11,7 +11,7 @@
     "strictNullChecks": true,
     "removeComments": true,
     "preserveConstEnums": true,
-    "sourceMap": true,
+    "sourceMap": false,
     "alwaysStrict": true,
     "strict": true,
     "noImplicitAny": true,

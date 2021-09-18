@@ -39,9 +39,7 @@ function plugins(page: string): Plugin[] {
     }),
     new CopyWebpackPlugin({
       patterns: [
-        { from: 'website/favicon.ico', to: 'favicon.ico' },
-        { from: 'website/robots.txt', to: 'robots.txt' },
-        { from: 'website/sitemap.xml', to: 'sitemap.xml' },
+        { from: 'website/favicon.ico', to: 'favicon.ico' }
       ],
     }),
   ];

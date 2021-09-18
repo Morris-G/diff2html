@@ -54,8 +54,8 @@ function diff2htmlUIBrowserConfig(entrypointName: string): webpack.Configuration
 const config: webpack.Configuration[] = [
   diff2htmlBrowserConfig,
   diff2htmlUIBrowserConfig('diff2html-ui'),
-  diff2htmlUIBrowserConfig('diff2html-ui-slim'),
-  diff2htmlUIBrowserConfig('diff2html-ui-base'),
+//   diff2htmlUIBrowserConfig('diff2html-ui-slim'),
+//   diff2htmlUIBrowserConfig('diff2html-ui-base'),
 ];
 
 export default config;

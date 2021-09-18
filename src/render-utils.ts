@@ -5,20 +5,20 @@ import * as rematch from './rematch';
 import { LineMatchingType, DiffStyleType, LineType, DiffLineParts, DiffFile, DiffFileName } from './types';
 
 export type CSSLineClass =
-  | 'd2h-ins'
-  | 'd2h-del'
-  | 'd2h-cntx'
-  | 'd2h-info'
-  | 'd2h-ins d2h-change'
-  | 'd2h-del d2h-change';
+  | 'cw-d2h-ins'
+  | 'cw-d2h-del'
+  | 'cw-d2h-cntx'
+  | 'cw-d2h-info'
+  | 'cw-d2h-ins cw-d2h-change'
+  | 'cw-d2h-del cw-d2h-change';
 
 export const CSSLineClass: { [_: string]: CSSLineClass } = {
-  INSERTS: 'd2h-ins',
-  DELETES: 'd2h-del',
-  CONTEXT: 'd2h-cntx',
-  INFO: 'd2h-info',
-  INSERT_CHANGES: 'd2h-ins d2h-change',
-  DELETE_CHANGES: 'd2h-del d2h-change',
+  INSERTS: 'cw-d2h-ins',
+  DELETES: 'cw-d2h-del',
+  CONTEXT: 'cw-d2h-cntx',
+  INFO: 'cw-d2h-info',
+  INSERT_CHANGES: 'cw-d2h-ins cw-d2h-change',
+  DELETE_CHANGES: 'cw-d2h-del cw-d2h-change',
 };
 
 export type HighlightedLines = {
@@ -186,7 +186,7 @@ export function filenameDiff(file: DiffFileName): string {
  * Generates a unique string numerical identifier based on the names of the file diff
  */
 export function getHtmlId(file: DiffFileName): string {
-  return `d2h-${hashCode(filenameDiff(file)).toString().slice(-6)}`;
+  return `cw-d2h-${hashCode(filenameDiff(file)).toString().slice(-6)}`;
 }
 
 /**
@@ -261,7 +261,7 @@ export function diffHighlight(
 
   const highlightedLine = diff.reduce((highlightedLine, part) => {
     const elemType = part.added ? 'ins' : part.removed ? 'del' : null;
-    const addClass = changedWords.indexOf(part) > -1 ? ' class="d2h-change"' : '';
+    const addClass = changedWords.indexOf(part) > -1 ? ' class="cw-d2h-change"' : '';
     const escapedValue = escapeForHtml(part.value);
 
     return elemType !== null

@@ -87,7 +87,7 @@ export default class SideBySideRenderer {
     return {
       right: '',
       left: this.hoganUtils.render(genericTemplatesPath, 'empty-diff', {
-        contentClass: 'd2h-code-side-line',
+        contentClass: 'cw-d2h-code-side-line',
         CSSLineClass: renderUtils.CSSLineClass,
       }),
     };
@@ -212,8 +212,8 @@ export default class SideBySideRenderer {
     return this.hoganUtils.render(genericTemplatesPath, 'block-header', {
       CSSLineClass: renderUtils.CSSLineClass,
       blockHeader: isLeft ? (file?.isTooBig ? block?.header : renderUtils.escapeForHtml(block?.header ?? '')) : '',
-      lineClass: 'd2h-code-side-linenumber',
-      contentClass: 'd2h-code-side-line',
+      lineClass: 'cw-d2h-code-side-linenumber',
+      contentClass: 'cw-d2h-code-side-line',
       newStartLine: block?.newStartLine,
       oldStartLine: block?.oldStartLine,
       isNewRender: !isLeft && block?.newStartLine !== 1,
@@ -289,13 +289,13 @@ export default class SideBySideRenderer {
   }
 
   generateSingleHtml(line?: DiffPreparedLine, file?: DiffFile, lineMode?: string): string {
-    const lineClass = 'd2h-code-side-linenumber';
-    const contentClass = 'd2h-code-side-line';
+    const lineClass = 'cw-d2h-code-side-linenumber';
+    const contentClass = 'cw-d2h-code-side-line';
 
     return this.hoganUtils.render(genericTemplatesPath, 'line', {
-      type: line?.type || `${renderUtils.CSSLineClass.CONTEXT} d2h-emptyplaceholder`,
-      lineClass: line !== undefined ? lineClass : `${lineClass} d2h-code-side-emptyplaceholder`,
-      contentClass: line !== undefined ? contentClass : `${contentClass} d2h-code-side-emptyplaceholder`,
+      type: line?.type || `${renderUtils.CSSLineClass.CONTEXT} cw-d2h-emptyplaceholder`,
+      lineClass: line !== undefined ? lineClass : `${lineClass} cw-d2h-code-side-emptyplaceholder`,
+      contentClass: line !== undefined ? contentClass : `${contentClass} cw-d2h-code-side-emptyplaceholder`,
       prefix: line?.prefix === ' ' ? '&nbsp;' : line?.prefix,
       content: line?.content,
       lineNumber: line?.number,

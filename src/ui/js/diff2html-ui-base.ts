@@ -3,6 +3,7 @@ import { closeTags, nodeStream, mergeStreams } from './highlight.js-helpers';
 import { html, Diff2HtmlConfig, defaultDiff2HtmlConfig } from '../../diff2html';
 import { DiffFile } from '../../types';
 import { HighlightResult, HLJSApi } from 'highlight.js';
+import { fireEvent } from '../../events'
 
 export interface Diff2HtmlUIConfig extends Diff2HtmlConfig {
   synchronisedScroll?: boolean;
@@ -52,65 +53,28 @@ export class Diff2HtmlUI {
     if (this.config.highlight) this.highlightCode();
     if (this.config.fileListToggle) this.fileListToggle(this.config.fileListStartVisible);
     if (this.config.fileContentToggle) this.fileContentToggle();
-    document.querySelectorAll('.load-more').forEach(el => {
-        el.addEventListener('click', e => {
-            const { fileMode, fileName, lineNumber } = (e?.target as HTMLElement)?.dataset
-            const loadMore = new CustomEvent('loadMore', {
-                detail: { fileMode, fileName, lineNumber }
-            })
-            window.dispatchEvent(loadMore)
-        })
-    })
-
-    document.querySelectorAll('.d2h-file-name-wrapper').forEach(cl => {
+    document.querySelectorAll('.cw-d2h-file-name-wrapper').forEach(cl => {
       cl.addEventListener('click', e => {
         (e?.target as HTMLElement)?.parentElement?.classList.toggle('uncollapse')
       })
     })
 
-    document.querySelectorAll('.d2h-file-header').forEach(el => {
-      el.addEventListener('click', e => {
-        const t = (e.target as HTMLElement).id
-        switch(t) {
-          case 'copy':
-            console.log('====click copy====')
-            break
-          case 'tool':
-            console.log('====click tool====')
-            break
-          case '':
-            console.log(e)
-        }
-      })
-    })
-
-    document.querySelectorAll('tbody.d2h-diff-tbody').forEach(tb => {
-        tb.addEventListener('click', e => {
-            // const target = e.target
-            const { className, dataset } = e.target as HTMLElement
-            // console.log({className, dataset})
-            const { fileName, lineMode, lineNumber, targetId } = dataset
-            switch(targetId) {
-                case 'lineNumber':
-                    // TODO
-                    document.querySelector('.code-line-selected')?.classList.remove('code-line-selected');
-                    (e?.target as HTMLElement)?.parentElement?.classList.toggle('code-line-selected')
-                    console.log(`点击了${lineMode === 'old' ? '左' : '右'}侧第${lineNumber}行，文件名是${fileName}`)
-                    break
-                case 'commentBtn':
-                    // TODO
-                    console.log(`点击了${lineMode === 'old' ? '左' : '右'}侧第${lineNumber}行的评论按钮，文件名是${fileName}`)
-                    break
-                default:
-                    console.log({ className, dataset })
-            }
+    // slected line
+    document.querySelectorAll('[data-target-id="lineNumber"]').forEach(ln => {
+        ln.addEventListener('click', e => {
+            document.querySelector('.code-line-selected')?.classList.remove('code-line-selected');
+            (e?.target as HTMLElement)?.parentElement?.classList.toggle('code-line-selected')
         })
     })
+    
+    fireEvent('.load-more', 'loadMore')
+    fireEvent('.cw-d2h-file-header', 'clickHeader')
+    fireEvent('tbody.cw-d2h-diff-tbody', 'clickDiffBody')
   }
 
   synchronisedScroll(): void {
-    this.targetElement.querySelectorAll('.d2h-file-wrapper').forEach(wrapper => {
-      const [left, right] = Array<Element>().slice.call(wrapper.querySelectorAll('.d2h-file-side-diff'));
+    this.targetElement.querySelectorAll('.cw-d2h-file-wrapper').forEach(wrapper => {
+      const [left, right] = Array<Element>().slice.call(wrapper.querySelectorAll('.cw-d2h-file-side-diff'));
 
       if (left === undefined || right === undefined) return;
 
@@ -131,9 +95,9 @@ export class Diff2HtmlUI {
   }
 
   fileListToggle(startVisible: boolean): void {
-    const showBtn: HTMLElement | null = this.targetElement.querySelector('.d2h-show');
-    const hideBtn: HTMLElement | null = this.targetElement.querySelector('.d2h-hide');
-    const fileList: HTMLElement | null = this.targetElement.querySelector('.d2h-file-list');
+    const showBtn: HTMLElement | null = this.targetElement.querySelector('.cw-d2h-show');
+    const hideBtn: HTMLElement | null = this.targetElement.querySelector('.cw-d2h-hide');
+    const fileList: HTMLElement | null = this.targetElement.querySelector('.cw-d2h-file-list');
 
     if (showBtn === null || hideBtn === null || fileList === null) return;
 
@@ -160,25 +124,25 @@ export class Diff2HtmlUI {
   }
 
   fileContentToggle(): void {
-    this.targetElement.querySelectorAll<HTMLElement>('.d2h-file-collapse').forEach(fileContentToggleBtn => {
+    this.targetElement.querySelectorAll<HTMLElement>('.cw-d2h-file-collapse').forEach(fileContentToggleBtn => {
       fileContentToggleBtn.style.display = 'flex';
 
       const toggleFileContents: (selector: string) => void = selector => {
         const fileContents: HTMLElement | null | undefined = fileContentToggleBtn
-          .closest('.d2h-file-wrapper')
+          .closest('.cw-d2h-file-wrapper')
           ?.querySelector(selector);
 
         if (fileContents !== null && fileContents !== undefined) {
-          fileContentToggleBtn.classList.toggle('d2h-selected');
-          fileContents.classList.toggle('d2h-d-none');
+          fileContentToggleBtn.classList.toggle('cw-d2h-selected');
+          fileContents.classList.toggle('cw-d2h-d-none');
         }
       };
 
       const toggleHandler: (e: Event) => void = e => {
         if (fileContentToggleBtn === e.target) return;
 
-        toggleFileContents('.d2h-file-diff');
-        toggleFileContents('.d2h-files-diff');
+        toggleFileContents('.cw-d2h-file-diff');
+        toggleFileContents('.cw-d2h-files-diff');
       };
 
       fileContentToggleBtn.addEventListener('click', e => toggleHandler(e));
@@ -191,7 +155,7 @@ export class Diff2HtmlUI {
     }
 
     // Collect all the diff files and execute the highlight on their lines
-    const files = this.targetElement.querySelectorAll('.d2h-file-wrapper');
+    const files = this.targetElement.querySelectorAll('.cw-d2h-file-wrapper');
     files.forEach(file => {
       // HACK: help Typescript know that `this.hljs` is defined since we already checked it
       if (this.hljs === null) return;
@@ -199,7 +163,7 @@ export class Diff2HtmlUI {
       const hljsLanguage = language ? this.hljs.getLanguage(language) : undefined;
 
       // Collect all the code lines and execute the highlight on them
-      const codeLines = file.querySelectorAll('.d2h-code-line-ctn');
+      const codeLines = file.querySelectorAll('.cw-d2h-code-line-ctn');
       codeLines.forEach(line => {
         // HACK: help Typescript know that `this.hljs` is defined since we already checked it
         if (this.hljs === null) return;

@@ -94,7 +94,7 @@ export function parse(diffInput: string, config: DiffParserConfig = {}): DiffFil
   const combinedDeletedFile = /^deleted file mode (\d{6}),(\d{6})/;
 
   const diffLines = diffInput
-    // .replace(/\\ No newline at end of file/g, '')
+    .replace(/ No newline at end of file/g, '')
     .replace(/\r\n?/g, '\n')
     .split('\n');
 

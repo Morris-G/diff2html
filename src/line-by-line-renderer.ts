@@ -85,7 +85,7 @@ export default class LineByLineRenderer {
 
   generateEmptyDiff(): string {
     return this.hoganUtils.render(genericTemplatesPath, 'empty-diff', {
-      contentClass: 'd2h-code-line',
+      contentClass: 'cw-d2h-code-line',
       CSSLineClass: renderUtils.CSSLineClass,
     });
   }
@@ -100,8 +100,8 @@ export default class LineByLineRenderer {
         let lines = this.hoganUtils.render(genericTemplatesPath, 'block-header', {
           CSSLineClass: renderUtils.CSSLineClass,
           blockHeader: file.isTooBig ? block.header : renderUtils.escapeForHtml(block.header),
-          lineClass: 'd2h-code-linenumber',
-          contentClass: 'd2h-code-line',
+          lineClass: 'cw-d2h-code-linenumber',
+          contentClass: 'cw-d2h-code-line',
 					newStartLine: block?.newStartLine,
 					oldStartLine: block?.oldStartLine,
 					isNewRender: block?.newStartLine !== 1,
@@ -275,8 +275,8 @@ export default class LineByLineRenderer {
 
     return this.hoganUtils.render(genericTemplatesPath, 'line', {
       type: line.type,
-      lineClass: 'd2h-code-linenumber',
-      contentClass: 'd2h-code-line',
+      lineClass: 'cw-d2h-code-linenumber',
+      contentClass: 'cw-d2h-code-line',
       prefix: line.prefix === ' ' ? '&nbsp;' : line.prefix,
       content: line.content,
       lineNumber: lineNumberHtml,

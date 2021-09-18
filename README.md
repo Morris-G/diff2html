@@ -345,9 +345,9 @@ The HTML output accepts a Javascript object with configuration. Possible options
   default is `200`
 - `compiledTemplates`: object ([Hogan.js](https://github.com/twitter/hogan.js/) template values) with previously
   compiled templates to replace parts of the html, default is `{}`. For example:
-  `{ "tag-file-changed": Hogan.compile("<span class="d2h-tag d2h-changed d2h-changed-tag">MODIFIED</span>") }`
+  `{ "tag-file-changed": Hogan.compile("<span class="cw-d2h-tag cw-d2h-changed cw-d2h-changed-tag">MODIFIED</span>") }`
 - `rawTemplates`: object (string values) with raw not compiled templates to replace parts of the html, default is `{}`.
-  For example: `{ "tag-file-changed": "<span class="d2h-tag d2h-changed d2h-changed-tag">MODIFIED</span>" }`
+  For example: `{ "tag-file-changed": "<span class="cw-d2h-tag cw-d2h-changed cw-d2h-changed-tag">MODIFIED</span>" }`
   > For more information regarding the possible templates look into
   > [src/templates](https://github.com/rtfpessoa/diff2html/tree/master/src/templates)
 

@@ -1,31 +1,25 @@
 <tr>
-    <td class="{{lineClass}} {{type}}"
-        data-target-id="lineNumber"
-        data-line-number="{{lineNumber}}"
-        data-file-name="{{fileName}}"
-        data-line-mode="{{lineMode}}">
-      {{{lineNumber}}}
-    </td>
-    <td class="{{type}}">
-        <div class="{{contentClass}}">
-            <span class="line-comment-btn"
-                data-target-id="commentBtn"
-                data-line-number="{{lineNumber}}"
-                data-file-name="{{fileName}}"
-                data-line-mode="{{lineMode}}">+
-            </span>
-        {{#prefix}}
-            <span class="d2h-code-line-prefix">{{{prefix}}}</span>
-        {{/prefix}}
-        {{^prefix}}
-            <span class="d2h-code-line-prefix">&nbsp;</span>
-        {{/prefix}}
-        {{#content}}
-            <span class="d2h-code-line-ctn">{{{content}}}</span>
-        {{/content}}
-        {{^content}}
-            <span class="d2h-code-line-ctn"><br></span>
-        {{/content}}
-        </div>
-    </td>
+  <td class="{{lineClass}} {{type}}" data-target-id="lineNumber" data-line-number="{{lineNumber}}"
+    data-file-name="{{fileName}}" data-line-mode="{{lineMode}}">
+    {{{lineNumber}}}
+  </td>
+  <td class="{{type}}">
+    <div class="{{contentClass}}">
+      <span class="line-comment-btn" data-target-id="commentBtn" data-line-number="{{lineNumber}}"
+        data-file-name="{{fileName}}" data-line-mode="{{lineMode}}">+
+      </span>
+      {{#prefix}}
+      <span class="cw-d2h-code-line-prefix">{{{prefix}}}</span>
+      {{/prefix}}
+      {{^prefix}}
+      <span class="cw-d2h-code-line-prefix">&nbsp;</span>
+      {{/prefix}}
+      {{#content}}
+      <span class="cw-d2h-code-line-ctn">{{{content}}}</span>
+      {{/content}}
+      {{^content}}
+      <span class="cw-d2h-code-line-ctn"><br></span>
+      {{/content}}
+    </div>
+  </td>
 </tr>

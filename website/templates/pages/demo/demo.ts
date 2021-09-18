@@ -7,7 +7,7 @@ import 'highlight.js/styles/base16/cupertino.css';
 import '../../../../src/ui/css/diff2html.css';
 import './demo.css';
 
-// import mutiDiff from './muti-diff'
+import mutiDiff from './muti-diff'
 /*
  * Example URLs:
  *
@@ -248,9 +248,9 @@ document.addEventListener('DOMContentLoaded', async () => {
     updateBrowserUrl(config, diffUrl);
     const newRequest = prepareRequest(diffUrl);
     diffString = await getDiff(newRequest);
-    // console.log(diffString)
-    draw(diffString, config, elements);
-    // draw(mutiDiff, config, elements);
+    console.log(diffString)
+    // draw(diffString, config, elements);
+    draw(mutiDiff, config, elements);
     /* document.querySelectorAll('[data-block-numbers]').forEach(el => {
         console.log(el)
     }) */
@@ -307,9 +307,17 @@ document.addEventListener('DOMContentLoaded', async () => {
     drawAndUpdateUrl(newDiffUrl, diffString, config, elements);
   });
 
-/*   window.addEventListener('loadMore', (e) => {
+  window.addEventListener('loadMore', (e) => {
     console.log('====loadMore====', (e as CustomEvent)?.detail)
-  }) */
+  })
+
+  window.addEventListener('clickHeader', (e) => {
+    console.log('====clickHeader====', (e as CustomEvent)?.detail)
+  })
+
+  window.addEventListener('clickDiffBody', (e) => {
+    console.log('====clickDiffBody====', (e as CustomEvent)?.detail)
+  })
 
   return drawAndUpdateUrl(elements.url.input.value, diffString, config, elements);
 });

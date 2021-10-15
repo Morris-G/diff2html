@@ -102,10 +102,10 @@ export default class LineByLineRenderer {
           blockHeader: file.isTooBig ? block.header : renderUtils.escapeForHtml(block.header),
           lineClass: 'cw-d2h-code-linenumber',
           contentClass: 'cw-d2h-code-line',
-					newStartLine: block?.newStartLine,
-					oldStartLine: block?.oldStartLine,
-					isNewRender: block?.newStartLine !== 1,
-					isOldRender: block?.oldStartLine !== 1,
+					newBlockStart: block?.newBlockStart,
+					oldBlockStart: block?.oldBlockStart,
+					isNewRender: block?.newBlockStart !== 1,
+					isOldRender: block?.oldBlockStart !== 1,
 					oldName: file?.oldName,
 					newName: file?.newName
         });

@@ -17,8 +17,8 @@ export interface Diff2HtmlConfig
 export const defaultDiff2HtmlConfig = {
   ...defaultLineByLineRendererConfig,
   ...defaultSideBySideRendererConfig,
-  outputFormat: OutputFormatType.LINE_BY_LINE,
-  drawFileList: true,
+  outputFormat: OutputFormatType.SIDE_BY_SIDE,
+  drawFileList: false,
 };
 
 export function parse(diffInput: string, configuration: Diff2HtmlConfig = {}): DiffFile[] {

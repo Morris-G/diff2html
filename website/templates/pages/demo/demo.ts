@@ -1,4 +1,5 @@
 import { Diff2HtmlUI, defaultDiff2HtmlUIConfig, Diff2HtmlUIConfig } from '../../../../src/ui/js/diff2html-ui';
+// import { Diff2HtmlUI, defaultDiff2HtmlUIConfig, Diff2HtmlUIConfig } from '../../../../bundles/js/diff2html-ui.min';
 
 import '../../../main.ts';
 import '../../../main.css';
@@ -7,7 +8,8 @@ import 'highlight.js/styles/base16/cupertino.css';
 import '../../../../src/ui/css/diff2html.css';
 import './demo.css';
 
-import mutiDiff from './muti-diff'
+import mutiDiff from './diff'
+// import mutiDiff from './muti-diff'
 /*
  * Example URLs:
  *
@@ -157,7 +159,9 @@ async function getDiff(request: Request): Promise<string> {
 
 function draw(diffString: string, config: Diff2HtmlUIConfig, elements: Elements): void {
   const diff2htmlUi = new Diff2HtmlUI(elements.structure.diffTarget, diffString, config);
+  console.log(diff2htmlUi)
   diff2htmlUi.draw();
+  diff2htmlUi.toggleFile(((document.querySelector('.cw-d2h-file-header') as HTMLElement).dataset.filePath as string))
 }
 
 async function prepareInitialState(elements: Elements): Promise<[Diff2HtmlUIConfig, string]> {
@@ -171,10 +175,11 @@ async function prepareInitialState(elements: Elements): Promise<[Diff2HtmlUIConf
   const initialConfiguration = getConfiguration(urlParams);
   const initialDiff = await getDiff(request);
 
+  console.log(initialConfiguration)
   return [initialConfiguration, initialDiff];
 }
 
-function updateBrowserUrl(config: Diff2HtmlUIConfig, newDiffUrl: string): void {
+/* function updateBrowserUrl(config: Diff2HtmlUIConfig, newDiffUrl: string): void {
   const paramString = Object.entries(config)
     .map(([k, v]) => k + '=' + v)
     .join('&');
@@ -190,7 +195,7 @@ function updateBrowserUrl(config: Diff2HtmlUIConfig, newDiffUrl: string): void {
     '=' +
     newDiffUrl;
   window.history.pushState({ path: newPageUrl }, '', newPageUrl);
-}
+} */
 
 type Elements = {
   structure: {
@@ -245,11 +250,12 @@ document.addEventListener('DOMContentLoaded', async () => {
     config: Diff2HtmlUIConfig,
     elements: Elements,
   ): Promise<void> => {
-    updateBrowserUrl(config, diffUrl);
-    const newRequest = prepareRequest(diffUrl);
-    diffString = await getDiff(newRequest);
-    console.log(diffString)
+    // updateBrowserUrl(config, diffUrl);
+    // const newRequest = prepareRequest(diffUrl);
+    // diffString = await getDiff(newRequest);
+    // console.log(diffUrl, diffString)
     // draw(diffString, config, elements);
+    [diffUrl, diffString ] = [ diffString, diffUrl ]
     draw(mutiDiff, config, elements);
     /* document.querySelectorAll('[data-block-numbers]').forEach(el => {
         console.log(el)

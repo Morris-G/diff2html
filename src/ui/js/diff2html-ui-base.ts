@@ -1,4 +1,4 @@
-import { closeTags, nodeStream, mergeStreams } from './highlight.js-helpers';
+import { closeTags, nodeStream, mergeStreams, getLanguage } from './highlight.js-helpers';
 
 import { html, Diff2HtmlConfig, defaultDiff2HtmlConfig } from '../../diff2html';
 import { DiffFile } from '../../types';
@@ -55,7 +55,8 @@ export class Diff2HtmlUI {
     if (this.config.fileContentToggle) this.fileContentToggle();
     document.querySelectorAll('.cw-d2h-file-name-wrapper').forEach(cl => {
       cl.addEventListener('click', e => {
-        (e?.target as HTMLElement)?.parentElement?.classList.toggle('uncollapse')
+        // (e?.target as HTMLElement)?.parentElement?.classList.toggle('uncollapse')
+        this.toggleFile(((e?.target as HTMLElement)?.parentElement?.dataset.filePath as string))
       })
     })
 
@@ -70,6 +71,7 @@ export class Diff2HtmlUI {
     fireEvent('.load-more', 'loadMore')
     fireEvent('.cw-d2h-file-header', 'clickHeader')
     fireEvent('tbody.cw-d2h-diff-tbody', 'clickDiffBody')
+    fireEvent('.cw-d2h-expand-all', 'expandAll')
   }
 
   synchronisedScroll(): void {
@@ -160,7 +162,8 @@ export class Diff2HtmlUI {
       // HACK: help Typescript know that `this.hljs` is defined since we already checked it
       if (this.hljs === null) return;
       const language = file.getAttribute('data-lang');
-      const hljsLanguage = language ? this.hljs.getLanguage(language) : undefined;
+    //   const hljsLanguage = language ? this.hljs.getLanguage(language) : undefined;
+      const hljsLanguage = language ? getLanguage(language) : 'plaintext';
 
       // Collect all the code lines and execute the highlight on them
       const codeLines = file.querySelectorAll('.cw-d2h-code-line-ctn');
@@ -175,7 +178,8 @@ export class Diff2HtmlUI {
 
         const result: HighlightResult = closeTags(
           this.hljs.highlight(text, {
-            language: hljsLanguage?.name === 'HTML, XML' ? 'XML' : hljsLanguage?.name || 'plaintext',
+            // language: hljsLanguage?.name === 'HTML, XML' ? 'XML' : hljsLanguage?.name || 'plaintext',
+            language: hljsLanguage,
             ignoreIllegals: true,
           }),
         );
@@ -218,5 +222,17 @@ export class Diff2HtmlUI {
 
   private isElement(arg?: unknown): arg is Element {
     return arg !== null && (arg as Element)?.classList !== undefined;
+  }
+
+  toggleFile(fileName: string) :void {
+    const target = document.querySelector(`[data-file-path='${fileName}']`)
+    target?.classList.toggle('uncollapse')
+    const customEvent = new CustomEvent('toggleFile', {
+        detail: {
+            target,
+            ...(target as HTMLElement)?.dataset
+        }
+    })  
+    window.dispatchEvent(customEvent)
   }
 }

@@ -1,6 +1,7 @@
 <span class="cw-d2h-file-name-wrapper">
   {{>collapseIcon}}
   <span class="cw-d2h-file-name">{{fileDiffName}}</span>
+  {{>fileTag}}
 </span>
 
 <div class="cw-d2h-file-stats">
@@ -8,4 +9,8 @@
   <span class="cw-d2h-lines-deleted">-{{deletedLines}}</span>
 </div>
 
-<div class="cw-d2h-to-view">查看</div>
+<div class="cw-d2h-to-view" data-file-path="{{fileName}}">查看</div>
+{{! <label class="d2h-file-collapse">
+  <input class="d2h-file-collapse-input" type="checkbox" name="viewed" value="viewed">
+  Viewed
+</label> }}

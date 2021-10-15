@@ -1,25 +1,24 @@
 <div id="{{fileHtmlId}}" class="cw-d2h-file-wrapper" data-lang="{{file.language}}">
-  <div class="cw-d2h-file-header" id="header">
+  <div class="cw-d2h-file-header uncollapse" id="header" data-file-path="{{fileName}}">
     {{{filePath}}}
   </div>
   <div class="cw-d2h-files-diff">
     <div class="cw-d2h-file-side-diff">
       <div class="cw-d2h-code-wrapper">
-        <table class="cw-d2h-diff-table">
-          <tbody class="cw-d2h-diff-tbody">
-            {{{diffs.left}}}
-          </tbody>
+        <table class="cw-d2h-diff-table" data-file-mode="old" data-file-name="{{fileName}}">
+          {{{diffs.left}}}
         </table>
       </div>
     </div>
     <div class="cw-d2h-file-side-diff">
       <div class="cw-d2h-code-wrapper">
-        <table class="cw-d2h-diff-table">
-          <tbody class="cw-d2h-diff-tbody">
-            {{{diffs.right}}}
-          </tbody>
+        <table class="cw-d2h-diff-table" data-file-mode="new" data-file-name="{{fileName}}">
+          {{{diffs.right}}}
         </table>
       </div>
     </div>
+    {{#isExpand}}
+    {{{expand}}}
+    {{/isExpand}}
   </div>
 </div>

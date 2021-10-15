@@ -34,9 +34,11 @@ export type DiffLineContent = {
 export type DiffLine = (DiffLineDeleted | DiffLineInserted | DiffLineContext) & DiffLineContent;
 
 export interface DiffBlock {
-  oldStartLine: number;
+  oldBlockStart: number;
+  oldBlockEnd: number;
   oldStartLine2?: number;
-  newStartLine: number;
+  newBlockStart: number;
+  newBlockEnd: number;
   header: string;
   lines: DiffLine[];
 }
@@ -68,6 +70,7 @@ export interface DiffFile extends DiffFileName {
   checksumBefore?: string | string[];
   checksumAfter?: string;
   mode?: string;
+  isEnd?: boolean;
 }
 
 export type OutputFormatType = 'line-by-line' | 'side-by-side';

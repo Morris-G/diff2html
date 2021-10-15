@@ -63,13 +63,16 @@ export default class SideBySideRenderer {
 	  const collapseIconTemplate = this.hoganUtils.template(iconsBaseTemplatesPath, 'collapse');
     const fileIconTemplate = this.hoganUtils.template(iconsBaseTemplatesPath, 'file');
     const fileTagTemplate = this.hoganUtils.template(tagsBaseTemplatesPath, renderUtils.getFileIcon(file));
-
+    const expandTemplate = this.hoganUtils.template('file', 'expand-all')
+    const lastBlock = file.blocks[file.blocks?.length - 1]
     return fileDiffTemplate.render({
       file: file,
+      fileName: file.newName || file.oldName,
       fileHtmlId: renderUtils.getHtmlId(file),
       diffs: diffs,
       filePath: filePathTemplate.render(
         {
+          fileName: file.newName || file.oldName,
           fileDiffName: renderUtils.filenameDiff(file),
           addedLines: file.addedLines,
           deletedLines: file.deletedLines
@@ -80,6 +83,15 @@ export default class SideBySideRenderer {
           fileTag: fileTagTemplate,
         },
       ),
+      isExpand: !file?.isNew && !file?.isDeleted && !file?.isRename && !file?.isBinary && !file?.isEnd,
+      expand: expandTemplate.render(
+          {
+            fileName: file.newName || file.oldName,
+            blockTitle: file?.isEnd ? '' : renderUtils.escapeForHtml(lastBlock?.header ?? ''),
+            newBlockEnd: lastBlock?.newBlockStart + lastBlock?.newBlockEnd - 1,
+            oldBlockEnd: lastBlock?.oldBlockStart + lastBlock?.oldBlockEnd - 1
+          }
+      )
     });
   }
 
@@ -208,16 +220,20 @@ export default class SideBySideRenderer {
     return doMatching ? matcher(oldLines, newLines) : [[oldLines, newLines]];
   }
 
-  makeHeaderHtml(block?: DiffBlock, file?: DiffFile, isLeft?: boolean): string {
+  makeHeaderHtml(block?: DiffBlock, file?: DiffFile, isLeft?: boolean, isEnd = false): string {
     return this.hoganUtils.render(genericTemplatesPath, 'block-header', {
+      isRender: !file?.isBinary ?? file.isCombined ?? !file.isNew ?? !file.isDeleted,
       CSSLineClass: renderUtils.CSSLineClass,
-      blockHeader: isLeft ? (file?.isTooBig ? block?.header : renderUtils.escapeForHtml(block?.header ?? '')) : '',
+      blockHeader: isEnd ? '' : (isLeft ? (file?.isTooBig ? block?.header : renderUtils.escapeForHtml(block?.header ?? '')) : ''),
+      blockTitle: isEnd ? '' : renderUtils.escapeForHtml(block?.header ?? ''),
       lineClass: 'cw-d2h-code-side-linenumber',
       contentClass: 'cw-d2h-code-side-line',
-      newStartLine: block?.newStartLine,
-      oldStartLine: block?.oldStartLine,
-      isNewRender: !isLeft && block?.newStartLine !== 1,
-      isOldRender: isLeft && block?.oldStartLine !== 1,
+      newBlockStart: block?.newBlockStart,
+      newBlockEnd: block?.newBlockEnd,
+      oldBlockStart: block?.oldBlockStart,
+      oldBlockEnd: block?.oldBlockEnd,
+      isNewRender: !isLeft && block?.newBlockStart !== 1 && block?.newBlockStart !== 0,
+      isOldRender: isLeft && block?.oldBlockStart !== 1 && block?.oldBlockStart !== 0,
       oldName: file?.oldName,
       newName: file?.newName
     });

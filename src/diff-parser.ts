@@ -57,8 +57,10 @@ export function parse(diffInput: string, config: DiffParserConfig = {}): DiffFil
   let currentFile: DiffFile | null = null;
   let currentBlock: DiffBlock | null = null;
   let oldLine: number | null = null;
+  let oldBlockEnd: number | null = null;
   let oldLine2: number | null = null; // Used for combined diff
   let newLine: number | null = null;
+  let newBlockEnd: number | null = null;
 
   let possibleOldName: string | null = null;
   let possibleNewName: string | null = null;
@@ -93,8 +95,11 @@ export function parse(diffInput: string, config: DiffParserConfig = {}): DiffFil
   const combinedNewFile = /^new file mode (\d{6})/;
   const combinedDeletedFile = /^deleted file mode (\d{6}),(\d{6})/;
 
+  /* No Newline */
+  const noNewline = / No newline at end of file/;
+
   const diffLines = diffInput
-    .replace(/ No newline at end of file/g, '')
+    // .replace(/ No newline at end of file/g, '')
     .replace(/\r\n?/g, '\n')
     .split('\n');
 
@@ -164,10 +169,12 @@ export function parse(diffInput: string, config: DiffParserConfig = {}): DiffFil
      */
 
     if (currentFile !== null) {
-      if ((values = /^@@ -(\d+)(?:,\d+)? \+(\d+)(?:,\d+)? @@.*/.exec(line))) {
+      if ((values = /^@@ -(\d+)(?:,\d+)?,(\d+) \+(\d+)(?:,\d+)?,(\d+) @@.*/.exec(line))) {
         currentFile.isCombined = false;
         oldLine = parseInt(values[1], 10);
-        newLine = parseInt(values[2], 10);
+        oldBlockEnd = parseInt(values[2], 10);
+        newLine = parseInt(values[3], 10);
+        newBlockEnd = parseInt(values[4], 10)
       } else if ((values = /^@@@ -(\d+)(?:,\d+)? -(\d+)(?:,\d+)? \+(\d+)(?:,\d+)? @@@.*/.exec(line))) {
         currentFile.isCombined = true;
         oldLine = parseInt(values[1], 10);
@@ -175,7 +182,7 @@ export function parse(diffInput: string, config: DiffParserConfig = {}): DiffFil
         newLine = parseInt(values[3], 10);
       } else {
         if (line.startsWith(hunkHeaderPrefix)) {
-          console.error('Failed to parse lines, starting in 0!');
+        //   console.error('Failed to parse lines, starting in 0!');
         }
 
         oldLine = 0;
@@ -189,13 +196,19 @@ export function parse(diffInput: string, config: DiffParserConfig = {}): DiffFil
       lines: [],
       // eslint-disable-next-line
       // @ts-ignore
-      oldStartLine: oldLine,
+      oldBlockStart: oldLine,
+      // eslint-disable-next-line
+      // @ts-ignore
+      oldBlockEnd: oldBlockEnd,
       // eslint-disable-next-line
       // @ts-ignore
       oldStartLine2: oldLine2,
       // eslint-disable-next-line
       // @ts-ignore
-      newStartLine: newLine,
+      newBlockStart: newLine,
+      // eslint-disable-next-line
+      // @ts-ignore
+      newBlockEnd: newBlockEnd,
       header: line,
     };
   }
@@ -361,7 +374,7 @@ export function parse(diffInput: string, config: DiffParserConfig = {}): DiffFil
         line.startsWith('+++ ') &&
         (values = getDstFilename(line, config.dstPrefix))
       ) {
-        currentFile.newName = values;
+        currentFile.newName = values === '/dev/null' ? '' : values;
         currentFile.language = getExtension(currentFile.newName, currentFile.language);
         return;
       }
@@ -382,7 +395,7 @@ export function parse(diffInput: string, config: DiffParserConfig = {}): DiffFil
      * 2. Old line     starts with: -
      * 3. Context line starts with: <SPACE>
      */
-    if (currentBlock && (line.startsWith('+') || line.startsWith('-') || line.startsWith(' '))) {
+    if (currentBlock && !noNewline.test(line) && (line.startsWith('+') || line.startsWith('-') || line.startsWith(' '))) {
       createLine(line);
       return;
     }
@@ -397,6 +410,11 @@ export function parse(diffInput: string, config: DiffParserConfig = {}): DiffFil
      * Git diffs provide more information regarding files modes, renames, copies,
      * commits between changes and similarity indexes
      */
+    if(noNewline.test(line)) {
+        currentFile.isEnd = true
+    } else {
+        currentFile.isEnd = false
+    }
     if ((values = oldMode.exec(line))) {
       currentFile.oldMode = values[1];
     } else if ((values = newMode.exec(line))) {

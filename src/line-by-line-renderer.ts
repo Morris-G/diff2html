@@ -97,7 +97,7 @@ export default class LineByLineRenderer {
 
     return file.blocks
       .map(block => {
-        let lines = this.hoganUtils.render(genericTemplatesPath, 'block-header', {
+        /* let lines = this.hoganUtils.render(genericTemplatesPath, 'block-header', {
           CSSLineClass: renderUtils.CSSLineClass,
           blockHeader: file.isTooBig ? block.header : renderUtils.escapeForHtml(block.header),
           lineClass: 'cw-d2h-code-linenumber',
@@ -108,7 +108,8 @@ export default class LineByLineRenderer {
 					isOldRender: block?.oldBlockStart !== 1,
 					oldName: file?.oldName,
 					newName: file?.newName
-        });
+        }); */
+				let lines = ''
 
         this.applyLineGroupping(block).forEach(([contextLines, oldLines, newLines]) => {
           if (oldLines.length && newLines.length && !contextLines.length) {

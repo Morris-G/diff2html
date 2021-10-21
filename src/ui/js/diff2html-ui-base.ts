@@ -53,25 +53,30 @@ export class Diff2HtmlUI {
     if (this.config.highlight) this.highlightCode();
     if (this.config.fileListToggle) this.fileListToggle(this.config.fileListStartVisible);
     if (this.config.fileContentToggle) this.fileContentToggle();
-    document.querySelectorAll('.cw-d2h-file-name-wrapper').forEach(cl => {
-      cl.addEventListener('click', e => {
-        // (e?.target as HTMLElement)?.parentElement?.classList.toggle('uncollapse')
-        this.toggleFile(((e?.target as HTMLElement)?.parentElement?.dataset.filePath as string))
-      })
-    })
 
-    // slected line
-    document.querySelectorAll('[data-target-id="lineNumber"]').forEach(ln => {
-        ln.addEventListener('click', e => {
-            document.querySelector('.code-line-selected')?.classList.remove('code-line-selected');
-            (e?.target as HTMLElement)?.parentElement?.classList.toggle('code-line-selected')
+    this.initEvents()
+  }
+
+  initEvents(): void {
+    document.querySelectorAll('.cw-d2h-file-name-wrapper').forEach(cl => {
+        cl.addEventListener('click', e => {
+          // (e?.target as HTMLElement)?.parentElement?.classList.toggle('uncollapse')
+          this.toggleFile(((e?.target as HTMLElement)?.parentElement?.dataset.filePath as string))
         })
-    })
-    
-    fireEvent('.load-more', 'loadMore')
-    fireEvent('.cw-d2h-file-header', 'clickHeader')
-    fireEvent('tbody.cw-d2h-diff-tbody', 'clickDiffBody')
-    fireEvent('.cw-d2h-expand-all', 'expandAll')
+      })
+  
+      // slected line
+      document.querySelectorAll('[data-target-id="lineNumber"]').forEach(ln => {
+          ln.addEventListener('click', e => {
+              document.querySelector('.code-line-selected')?.classList.remove('code-line-selected');
+              (e?.target as HTMLElement)?.parentElement?.classList.toggle('code-line-selected')
+          })
+      })
+      
+      fireEvent('.load-more', 'loadMore')
+      fireEvent('.cw-d2h-file-header', 'clickHeader')
+      fireEvent('.cw-d2h-diff-table tbody', 'clickDiffBody')
+      fireEvent('.cw-d2h-expand-all', 'expandAll')
   }
 
   synchronisedScroll(): void {
@@ -234,5 +239,13 @@ export class Diff2HtmlUI {
         }
     })  
     window.dispatchEvent(customEvent)
+  }
+
+  fireEvent(ele: string, name: string) :void {
+      return fireEvent(ele, name)
+  }
+
+  getHtml(input: string, config: Diff2HtmlUIConfig): string {
+      return html(input, config)
   }
 }

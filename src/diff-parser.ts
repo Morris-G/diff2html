@@ -169,12 +169,12 @@ export function parse(diffInput: string, config: DiffParserConfig = {}): DiffFil
      */
 
     if (currentFile !== null) {
-      if ((values = /^@@ -(\d+)(?:,\d+)?,(\d+) \+(\d+)(?:,\d+)?,(\d+) @@.*/.exec(line))) {
+      if ((values = /^@@ -(\d+)(?:,\d+)?,?(\d+)? \+(\d+)(?:,\d+)?,?(\d+)? @@.*/.exec(line))) {
         currentFile.isCombined = false;
         oldLine = parseInt(values[1], 10);
-        oldBlockEnd = parseInt(values[2], 10);
+        oldBlockEnd = isNaN(parseInt(values[2], 10)) ? 1 : parseInt(values[2], 10);
         newLine = parseInt(values[3], 10);
-        newBlockEnd = parseInt(values[4], 10)
+        newBlockEnd = isNaN(parseInt(values[4], 10)) ? 1 : parseInt(values[4], 10)
       } else if ((values = /^@@@ -(\d+)(?:,\d+)? -(\d+)(?:,\d+)? \+(\d+)(?:,\d+)? @@@.*/.exec(line))) {
         currentFile.isCombined = true;
         oldLine = parseInt(values[1], 10);

@@ -19,7 +19,7 @@ diff --git a/src/frontend/bk-code/src/router/index.js b/src/frontend/bk-code/src
 index e5d24947607b500f0f48c2ef0e13891c7642a536..e89ac6c88994376a3d1d14dd110c9b63b4fc3394 100644
 --- a/src/frontend/bk-code/src/router/index.js
 +++ b/src/frontend/bk-code/src/router/index.js
-@@ -4,11 +4,24 @@ import routes from './router'
+@@ -4 +4,24 @@ import routes from './router'
  
  Vue.use(VueRouter)
  

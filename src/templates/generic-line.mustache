@@ -5,9 +5,11 @@
   </td>
   <td class="{{type}}">
     <div class="{{contentClass}}">
+      {{#lineNumber}}
       <span class="line-comment-btn" data-target-id="commentBtn" data-line-number="{{lineNumber}}"
         data-file-name="{{fileName}}" data-line-mode="{{lineMode}}">+
       </span>
+      {{/lineNumber}}
       {{#prefix}}
       <span class="cw-d2h-code-line-prefix">{{{prefix}}}</span>
       {{/prefix}}

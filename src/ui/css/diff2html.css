@@ -310,14 +310,6 @@
   line-height: 1;
 }
 
-.cw-d2h-file-diff .cw-d2h-del.cw-d2h-change {
-  background-color: #fdf2d0;
-}
-
-.cw-d2h-file-diff .cw-d2h-ins.cw-d2h-change {
-  background-color: #ded;
-}
-
 /*
  * File Summary List
  */
@@ -482,13 +474,15 @@ span.line-comment-btn:hover {
   opacity: 1;
 }
 
-.code-line-selected td.cw-d2h-code-side-linenumber {
-  background-color: #c6cced;
+.code-line-selected td.cw-d2h-code-side-linenumber,
+.code-line-selected.cw-d2h-code-linenumber {
+  background-color: #c6cced!important;
   border-color: #c6cced;
 }
 
-.code-line-selected td.cw-d2h-code-side-linenumber+td {
-  background-color: #c6cced;
+.code-line-selected td.cw-d2h-code-side-linenumber+td,
+.code-line-selected.cw-d2h-code-linenumber+td {
+  background-color: #c6cced!important;
 }
 
 .cw-d2h-expand-all {

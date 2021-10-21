@@ -159,9 +159,13 @@ async function getDiff(request: Request): Promise<string> {
 
 function draw(diffString: string, config: Diff2HtmlUIConfig, elements: Elements): void {
   const diff2htmlUi = new Diff2HtmlUI(elements.structure.diffTarget, diffString, config);
-  console.log(diff2htmlUi)
+//   const str = diff2htmlUi.getHtml(diffString, config)
+//   const d = document.querySelector('div.insert')
+//   if(d) d.innerHTML = str
   diff2htmlUi.draw();
+//   diff2htmlUi.initEvents()
   diff2htmlUi.toggleFile(((document.querySelector('.cw-d2h-file-header') as HTMLElement).dataset.filePath as string))
+  console.log(diff2htmlUi)
 }
 
 async function prepareInitialState(elements: Elements): Promise<[Diff2HtmlUIConfig, string]> {

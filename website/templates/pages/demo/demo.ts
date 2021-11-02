@@ -8,7 +8,7 @@ import 'highlight.js/styles/base16/cupertino.css';
 import '../../../../src/ui/css/diff2html.css';
 import './demo.css';
 
-import mutiDiff from './diff'
+import mutiDiff from './diff';
 // import mutiDiff from './muti-diff'
 /*
  * Example URLs:
@@ -159,13 +159,13 @@ async function getDiff(request: Request): Promise<string> {
 
 function draw(diffString: string, config: Diff2HtmlUIConfig, elements: Elements): void {
   const diff2htmlUi = new Diff2HtmlUI(elements.structure.diffTarget, diffString, config);
-//   const str = diff2htmlUi.getHtml(diffString, config)
-//   const d = document.querySelector('div.insert')
-//   if(d) d.innerHTML = str
+  //   const str = diff2htmlUi.getHtml(diffString, config)
+  //   const d = document.querySelector('div.insert')
+  //   if(d) d.innerHTML = str
   diff2htmlUi.draw();
-//   diff2htmlUi.initEvents()
-  diff2htmlUi.toggleFile(((document.querySelector('.cw-d2h-file-header') as HTMLElement).dataset.filePath as string))
-  console.log(diff2htmlUi)
+  //   diff2htmlUi.initEvents()
+  diff2htmlUi.toggleFile((document.querySelector('.cw-d2h-file-header') as HTMLElement).dataset.filePath as string);
+  //   console.log(diff2htmlUi)
 }
 
 async function prepareInitialState(elements: Elements): Promise<[Diff2HtmlUIConfig, string]> {
@@ -179,7 +179,7 @@ async function prepareInitialState(elements: Elements): Promise<[Diff2HtmlUIConf
   const initialConfiguration = getConfiguration(urlParams);
   const initialDiff = await getDiff(request);
 
-  console.log(initialConfiguration)
+  //   console.log(initialConfiguration);
   return [initialConfiguration, initialDiff];
 }
 
@@ -259,7 +259,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     // diffString = await getDiff(newRequest);
     // console.log(diffUrl, diffString)
     // draw(diffString, config, elements);
-    [diffUrl, diffString ] = [ diffString, diffUrl ]
+    [diffUrl, diffString] = [diffString, diffUrl];
     draw(mutiDiff, config, elements);
     /* document.querySelectorAll('[data-block-numbers]').forEach(el => {
         console.log(el)
@@ -317,17 +317,17 @@ document.addEventListener('DOMContentLoaded', async () => {
     drawAndUpdateUrl(newDiffUrl, diffString, config, elements);
   });
 
-  window.addEventListener('loadMore', (e) => {
-    console.log('====loadMore====', (e as CustomEvent)?.detail)
-  })
+  window.addEventListener('loadMore', e => {
+    console.log('====loadMore====', (e as CustomEvent)?.detail);
+  });
 
-  window.addEventListener('clickHeader', (e) => {
-    console.log('====clickHeader====', (e as CustomEvent)?.detail)
-  })
+  window.addEventListener('clickHeader', e => {
+    console.log('====clickHeader====', (e as CustomEvent)?.detail);
+  });
 
-  window.addEventListener('clickDiffBody', (e) => {
-    console.log('====clickDiffBody====', (e as CustomEvent)?.detail)
-  })
+  window.addEventListener('clickDiffBody', e => {
+    console.log('====clickDiffBody====', (e as CustomEvent)?.detail);
+  });
 
   return drawAndUpdateUrl(elements.url.input.value, diffString, config, elements);
 });

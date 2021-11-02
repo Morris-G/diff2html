@@ -169,12 +169,12 @@ export function parse(diffInput: string, config: DiffParserConfig = {}): DiffFil
      */
 
     if (currentFile !== null) {
-      if ((values = /^@@ -(\d+)(?:,\d+)?,?(\d+)? \+(\d+)(?:,\d+)?,?(\d+)? @@.*/.exec(line))) {
+      if ((values = /^@@ -(\d+)(,\d+)? \+(\d+)(,\d+)? @@.*/.exec(line))) {
         currentFile.isCombined = false;
         oldLine = parseInt(values[1], 10);
-        oldBlockEnd = isNaN(parseInt(values[2], 10)) ? 1 : parseInt(values[2], 10);
+        oldBlockEnd = isNaN(parseInt(values[2]?.replace(',', ''), 10)) ? 1 : parseInt(values[2]?.replace(',', ''), 10);
         newLine = parseInt(values[3], 10);
-        newBlockEnd = isNaN(parseInt(values[4], 10)) ? 1 : parseInt(values[4], 10)
+        newBlockEnd = isNaN(parseInt(values[4]?.replace(',', ''), 10)) ? 1 : parseInt(values[4]?.replace(',', ''), 10);
       } else if ((values = /^@@@ -(\d+)(?:,\d+)? -(\d+)(?:,\d+)? \+(\d+)(?:,\d+)? @@@.*/.exec(line))) {
         currentFile.isCombined = true;
         oldLine = parseInt(values[1], 10);
@@ -182,7 +182,7 @@ export function parse(diffInput: string, config: DiffParserConfig = {}): DiffFil
         newLine = parseInt(values[3], 10);
       } else {
         if (line.startsWith(hunkHeaderPrefix)) {
-        //   console.error('Failed to parse lines, starting in 0!');
+          //   console.error('Failed to parse lines, starting in 0!');
         }
 
         oldLine = 0;
@@ -395,7 +395,11 @@ export function parse(diffInput: string, config: DiffParserConfig = {}): DiffFil
      * 2. Old line     starts with: -
      * 3. Context line starts with: <SPACE>
      */
-    if (currentBlock && !noNewline.test(line) && (line.startsWith('+') || line.startsWith('-') || line.startsWith(' '))) {
+    if (
+      currentBlock &&
+      !noNewline.test(line) &&
+      (line.startsWith('+') || line.startsWith('-') || line.startsWith(' '))
+    ) {
       createLine(line);
       return;
     }
@@ -410,10 +414,10 @@ export function parse(diffInput: string, config: DiffParserConfig = {}): DiffFil
      * Git diffs provide more information regarding files modes, renames, copies,
      * commits between changes and similarity indexes
      */
-    if(noNewline.test(line)) {
-        currentFile.isEnd = true
+    if (noNewline.test(line)) {
+      currentFile.isEnd = true;
     } else {
-        currentFile.isEnd = false
+      currentFile.isEnd = false;
     }
     if ((values = oldMode.exec(line))) {
       currentFile.oldMode = values[1];

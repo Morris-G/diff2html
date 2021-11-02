@@ -65,14 +65,12 @@
   font-weight: 600;
   white-space: nowrap;
   text-overflow: ellipsis;
-  overflow-x: hidden;
 }
 
 .cw-d2h-file-wrapper {
   border: 1px solid #CBD5E0;
   border-radius: 5px;
   margin-bottom: 1em;
-  overflow: hidden;
 }
 
 .cw-d2h-file-collapse {
@@ -213,7 +211,7 @@
   color: rgba(0, 0, 0, 0.3);
   text-align: right;
   border: solid #eeeeee;
-  border-width: 0 1px 0 1px;
+  border-width: 0 1px 0 0;
 }
 
 .cw-d2h-code-linenumber.cw-d2h-info {
@@ -476,19 +474,19 @@ span.line-comment-btn:hover {
 
 .code-line-selected td.cw-d2h-code-side-linenumber,
 .code-line-selected.cw-d2h-code-linenumber {
-  background-color: #c6cced!important;
+  background-color: #c6cced !important;
   border-color: #c6cced;
 }
 
 .code-line-selected td.cw-d2h-code-side-linenumber+td,
 .code-line-selected.cw-d2h-code-linenumber+td {
-  background-color: #c6cced!important;
+  background-color: #c6cced !important;
 }
 
 .cw-d2h-expand-all {
-    text-align: center;
-    border-top: 1px solid #cbd5e0;
-    padding: 3px 5px;
-    cursor: pointer;
-    font-size: 12px;
-  }
+  text-align: center;
+  border-top: 1px solid #cbd5e0;
+  padding: 3px 5px;
+  cursor: pointer;
+  font-size: 12px;
+}

@@ -60,11 +60,11 @@ export default class SideBySideRenderer {
 
     const fileDiffTemplate = this.hoganUtils.template(baseTemplatesPath, 'file-diff');
     const filePathTemplate = this.hoganUtils.template(genericTemplatesPath, 'file-path');
-	  const collapseIconTemplate = this.hoganUtils.template(iconsBaseTemplatesPath, 'collapse');
+    const collapseIconTemplate = this.hoganUtils.template(iconsBaseTemplatesPath, 'collapse');
     const fileIconTemplate = this.hoganUtils.template(iconsBaseTemplatesPath, 'file');
     const fileTagTemplate = this.hoganUtils.template(tagsBaseTemplatesPath, renderUtils.getFileIcon(file));
-    const expandTemplate = this.hoganUtils.template('file', 'expand-all')
-    const lastBlock = file.blocks[file.blocks?.length - 1]
+    const expandTemplate = this.hoganUtils.template('file', 'expand-all');
+    const lastBlock = file.blocks[file.blocks?.length - 1];
     return fileDiffTemplate.render({
       file: file,
       fileName: file.newName || file.oldName,
@@ -75,7 +75,7 @@ export default class SideBySideRenderer {
           fileName: file.newName || file.oldName,
           fileDiffName: renderUtils.filenameDiff(file),
           addedLines: file.addedLines,
-          deletedLines: file.deletedLines
+          deletedLines: file.deletedLines,
         },
         {
           collapseIcon: collapseIconTemplate,
@@ -84,14 +84,12 @@ export default class SideBySideRenderer {
         },
       ),
       isExpand: !file?.isNew && !file?.isDeleted && !file?.isRename && !file?.isBinary && !file?.isEnd,
-      expand: expandTemplate.render(
-          {
-            fileName: file.newName || file.oldName,
-            blockTitle: file?.isEnd ? '' : renderUtils.escapeForHtml(lastBlock?.header ?? ''),
-            newBlockEnd: lastBlock?.newBlockStart + lastBlock?.newBlockEnd - 1,
-            oldBlockEnd: lastBlock?.oldBlockStart + lastBlock?.oldBlockEnd - 1
-          }
-      )
+      expand: expandTemplate.render({
+        fileName: file.newName || file.oldName,
+        blockTitle: file?.isEnd ? '' : renderUtils.escapeForHtml(lastBlock?.header ?? ''),
+        newBlockEnd: lastBlock?.newBlockStart + lastBlock?.newBlockEnd - 1,
+        oldBlockEnd: lastBlock?.oldBlockStart + lastBlock?.oldBlockEnd - 1,
+      }),
     });
   }
 
@@ -140,7 +138,7 @@ export default class SideBySideRenderer {
                   content: content,
                   number: line.newNumber,
                 },
-                file
+                file,
               );
               fileHtml.left += left;
               fileHtml.right += right;
@@ -224,7 +222,13 @@ export default class SideBySideRenderer {
     return this.hoganUtils.render(genericTemplatesPath, 'block-header', {
       isRender: !file?.isBinary ?? file.isCombined ?? !file.isNew ?? !file.isDeleted,
       CSSLineClass: renderUtils.CSSLineClass,
-      blockHeader: isEnd ? '' : (isLeft ? (file?.isTooBig ? block?.header : renderUtils.escapeForHtml(block?.header ?? '')) : ''),
+      blockHeader: isEnd
+        ? ''
+        : isLeft
+        ? file?.isTooBig
+          ? block?.header
+          : renderUtils.escapeForHtml(block?.header ?? '')
+        : '',
       blockTitle: isEnd ? '' : renderUtils.escapeForHtml(block?.header ?? ''),
       lineClass: 'cw-d2h-code-side-linenumber',
       contentClass: 'cw-d2h-code-side-line',
@@ -235,7 +239,7 @@ export default class SideBySideRenderer {
       isNewRender: !isLeft && block?.newBlockStart !== 1 && block?.newBlockStart !== 0,
       isOldRender: isLeft && block?.oldBlockStart !== 1 && block?.oldBlockStart !== 0,
       oldName: file?.oldName,
-      newName: file?.newName
+      newName: file?.newName,
     });
   }
 
@@ -316,7 +320,7 @@ export default class SideBySideRenderer {
       content: line?.content,
       lineNumber: line?.number,
       fileName: lineMode === 'old' ? file?.oldName : file?.newName ?? file?.oldName,
-      lineMode: lineMode
+      lineMode: lineMode,
     });
   }
 }

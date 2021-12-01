@@ -3,7 +3,8 @@ import { closeTags, nodeStream, mergeStreams, getLanguage } from './highlight.js
 import { html, Diff2HtmlConfig, defaultDiff2HtmlConfig } from '../../diff2html';
 import { DiffFile } from '../../types';
 import { HighlightResult, HLJSApi } from 'highlight.js';
-import { fireEvent } from '../../events'
+import { fireEvent } from '../../events';
+import { loadScript } from '../../utils';
 
 export interface Diff2HtmlUIConfig extends Diff2HtmlConfig {
   synchronisedScroll?: boolean;
@@ -54,29 +55,29 @@ export class Diff2HtmlUI {
     if (this.config.fileListToggle) this.fileListToggle(this.config.fileListStartVisible);
     if (this.config.fileContentToggle) this.fileContentToggle();
 
-    this.initEvents()
+    this.initEvents();
   }
 
   initEvents(): void {
     document.querySelectorAll('.cw-d2h-file-name-wrapper').forEach(cl => {
-        cl.addEventListener('click', e => {
-          // (e?.target as HTMLElement)?.parentElement?.classList.toggle('uncollapse')
-          this.toggleFile(((e?.target as HTMLElement)?.parentElement?.dataset.filePath as string))
-        })
-      })
-  
-      // slected line
-      document.querySelectorAll('[data-target-id="lineNumber"]').forEach(ln => {
-          ln.addEventListener('click', e => {
-              document.querySelector('.code-line-selected')?.classList.remove('code-line-selected');
-              (e?.target as HTMLElement)?.parentElement?.classList.toggle('code-line-selected')
-          })
-      })
-      
-      fireEvent('.load-more', 'loadMore')
-      fireEvent('.cw-d2h-file-header', 'clickHeader')
-      fireEvent('.cw-d2h-diff-table tbody', 'clickDiffBody')
-      fireEvent('.cw-d2h-expand-all', 'expandAll')
+      cl.addEventListener('click', e => {
+        // (e?.target as HTMLElement)?.parentElement?.classList.toggle('uncollapse')
+        this.toggleFile((e?.target as HTMLElement)?.parentElement?.dataset.filePath as string);
+      });
+    });
+
+    // slected line
+    document.querySelectorAll('[data-target-id="lineNumber"]').forEach(ln => {
+      ln.addEventListener('click', e => {
+        document.querySelector('.code-line-selected')?.classList.remove('code-line-selected');
+        (e?.target as HTMLElement)?.parentElement?.classList.toggle('code-line-selected');
+      });
+    });
+
+    fireEvent('.load-more', 'loadMore');
+    fireEvent('.cw-d2h-file-header', 'clickHeader');
+    fireEvent('.cw-d2h-diff-table tbody', 'clickDiffBody');
+    fireEvent('.cw-d2h-expand-all', 'expandAll');
   }
 
   synchronisedScroll(): void {
@@ -156,19 +157,22 @@ export class Diff2HtmlUI {
     });
   }
 
-  highlightCode(): void {
+  highlightCode(langBase?: string): void {
     if (this.hljs === null) {
       throw new Error('Missing a `highlight.js` implementation. Please provide one when instantiating Diff2HtmlUI.');
     }
 
     // Collect all the diff files and execute the highlight on their lines
     const files = this.targetElement.querySelectorAll('.cw-d2h-file-wrapper');
-    files.forEach(file => {
+    files.forEach(async file => {
       // HACK: help Typescript know that `this.hljs` is defined since we already checked it
       if (this.hljs === null) return;
       const language = file.getAttribute('data-lang');
-    //   const hljsLanguage = language ? this.hljs.getLanguage(language) : undefined;
+      //   const hljsLanguage = language ? this.hljs.getLanguage(language) : undefined;
       const hljsLanguage = language ? getLanguage(language) : 'plaintext';
+      if (this.hljs.listLanguages().indexOf(hljsLanguage) < 0) {
+        await loadScript(`${langBase}/${hljsLanguage}.min.js`);
+      }
 
       // Collect all the code lines and execute the highlight on them
       const codeLines = file.querySelectorAll('.cw-d2h-code-line-ctn');
@@ -198,7 +202,7 @@ export class Diff2HtmlUI {
 
         line.classList.add('hljs');
         if (result.language) {
-          const langStr = result.language.replaceAll(' ', '&nbsp;')
+          const langStr = result.language.replaceAll(' ', '&nbsp;');
           line.classList.add(langStr);
         }
         line.innerHTML = result.value;
@@ -229,23 +233,23 @@ export class Diff2HtmlUI {
     return arg !== null && (arg as Element)?.classList !== undefined;
   }
 
-  toggleFile(fileName: string) :void {
-    const target = document.querySelector(`[data-file-path='${fileName}']`)
-    target?.classList.toggle('uncollapse')
+  toggleFile(fileName: string): void {
+    const target = document.querySelector(`[data-file-path='${fileName}']`);
+    target?.classList.toggle('uncollapse');
     const customEvent = new CustomEvent('toggleFile', {
-        detail: {
-            target,
-            ...(target as HTMLElement)?.dataset
-        }
-    })  
-    window.dispatchEvent(customEvent)
+      detail: {
+        target,
+        ...(target as HTMLElement)?.dataset,
+      },
+    });
+    window.dispatchEvent(customEvent);
   }
 
-  fireEvent(ele: string, name: string) :void {
-      return fireEvent(ele, name)
+  fireEvent(ele: string, name: string): void {
+    return fireEvent(ele, name);
   }
 
   getHtml(input: string, config: Diff2HtmlUIConfig): string {
-      return html(input, config)
+    return html(input, config);
   }
 }

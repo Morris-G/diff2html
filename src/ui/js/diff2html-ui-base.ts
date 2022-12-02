@@ -1,6 +1,6 @@
 import { closeTags, nodeStream, mergeStreams, getLanguage } from './highlight.js-helpers';
 
-import { html, Diff2HtmlConfig, defaultDiff2HtmlConfig } from '../../diff2html';
+import { html, Diff2HtmlConfig, defaultDiff2HtmlConfig, parse } from '../../diff2html';
 import { DiffFile } from '../../types';
 import { HighlightResult, HLJSApi } from 'highlight.js';
 import { fireEvent } from '../../events';
@@ -36,6 +36,7 @@ export const defaultDiff2HtmlUIConfig = {
 export class Diff2HtmlUI {
   readonly config: typeof defaultDiff2HtmlUIConfig;
   readonly diffHtml: string;
+  readonly diffFiles: DiffFile[]
   readonly targetElement: HTMLElement;
   readonly hljs: HLJSApi | null = null;
 
@@ -43,9 +44,14 @@ export class Diff2HtmlUI {
 
   constructor(target: HTMLElement, diffInput?: string | DiffFile[], config: Diff2HtmlUIConfig = {}, hljs?: HLJSApi) {
     this.config = { ...defaultDiff2HtmlUIConfig, ...config };
+    this.diffFiles = this.parse(diffInput as string);
     this.diffHtml = diffInput !== undefined ? html(diffInput, this.config) : target.innerHTML;
     this.targetElement = target;
     if (hljs !== undefined) this.hljs = hljs;
+  }
+
+  parse(diffInput: string): DiffFile[] {
+    return parse(diffInput, this.config);
   }
 
   draw(): void {

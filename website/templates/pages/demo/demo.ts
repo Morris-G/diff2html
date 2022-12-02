@@ -8,7 +8,8 @@ import 'highlight.js/styles/base16/cupertino.css';
 import '../../../../src/ui/css/diff2html.css';
 import './demo.css';
 
-import mutiDiff from './diff';
+// import mutiDiff from './diff';
+import mutiDiff from './diff1'
 // import mutiDiff from './muti-diff'
 /*
  * Example URLs:
